@@ -1,0 +1,10 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_URL:localhost:5432/cinema-search-db}
+    username: postgres
+
+  jpa:
+    database: postgres
