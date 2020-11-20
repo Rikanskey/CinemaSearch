@@ -206,10 +206,9 @@ export default {
     },
   },
   created() {
-    api.getMovie(this.movie.id).then((response) => {
+    api.getMovie(this.$route.params.id).then((response) => {
       this.movie = response.data
       let release_date = response.data.release.slice(0, 10).split('-')
-      console.log(release_date)
       const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
       ];

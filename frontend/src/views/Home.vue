@@ -15,7 +15,7 @@
         <h2 class="style_welcome_head__style style_welcome_head__text">Top 5 movies</h2>
         <div class="style_top_5__poster_container">
             <div class="styles_posterColumn__width" v-for="item in items" :key=item.id>
-              <router-link to="/film/{item.id}">
+              <router-link :to="{path: '/film/' + item.id}">
                 <img class="film-poster styles_pic__size styles_pic__back image"
                      v-bind:src="item.poster" alt="">
               </router-link>
