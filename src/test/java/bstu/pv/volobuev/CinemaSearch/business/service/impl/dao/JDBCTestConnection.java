@@ -17,7 +17,7 @@ public class JDBCTestConnection {
         try{
             log.info("Connecting to database " + url);
             Connection connection = DriverManager.getConnection(url, user, "");
-            log.info("{}", connection.toString());
+            log.info("{}", connection);
         }
         catch (Exception e){
             log.info("Connection failed");

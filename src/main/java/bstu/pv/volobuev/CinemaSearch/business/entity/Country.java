@@ -1,8 +1,6 @@
 package bstu.pv.volobuev.CinemaSearch.business.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.util.Set;
 
@@ -12,6 +10,8 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "country")
 @Getter
 @Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Country {
 
@@ -22,6 +22,8 @@ public class Country {
     @NotNull
     String name;
 
-    @ManyToMany
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "movies")
     Set<Movie> movies;
 }

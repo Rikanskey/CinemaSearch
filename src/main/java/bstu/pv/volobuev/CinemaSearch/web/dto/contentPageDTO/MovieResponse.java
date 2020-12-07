@@ -1,4 +1,4 @@
-package bstu.pv.volobuev.CinemaSearch.dto.contentPageDTO;
+package bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO;
 
 import lombok.AccessLevel;
 import lombok.Data;

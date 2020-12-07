@@ -22,14 +22,14 @@ public class Movie {
     String name;
 
     @NotNull
-    Integer budget;
+    Long budget;
 
     @NotNull
-    Integer box_office;
+    Long box_office;
 
     @NotNull
-    @Temporal(TemporalType.DATE)
-    Date release;
+//    @Temporal(TemporalType.DATE)
+    GregorianCalendar release;
 
     @NotNull
     Time duration;

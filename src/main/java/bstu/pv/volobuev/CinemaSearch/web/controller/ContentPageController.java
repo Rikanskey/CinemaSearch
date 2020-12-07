@@ -1,10 +1,10 @@
-package bstu.pv.volobuev.CinemaSearch.controller;
+package bstu.pv.volobuev.CinemaSearch.web.controller;
 
-import bstu.pv.volobuev.CinemaSearch.dto.contentPageDTO.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.CountryResponse;
+import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.GenreResponse;
+import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.MovieResponse;
+import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.PersonResponse;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
