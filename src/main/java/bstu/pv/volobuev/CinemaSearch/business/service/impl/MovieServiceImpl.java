@@ -14,7 +14,6 @@ public class MovieServiceImpl implements MovieService{
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
 
-
     public MovieResponse getMovie(Long id){
         return movieMapper.toDTO(movieRepository.getMovieById(id));
     }

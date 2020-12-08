@@ -8,5 +8,13 @@ const AXIOS = axios.create({
 export default {
     getMovie(movieId){
         return AXIOS.get('/movie/' + movieId);
+    },
+
+    getMovieWithHigherRating(){
+        return AXIOS.get('/');
+    },
+
+    getRandomMovieId(){
+        return AXIOS.get('/random')
     }
 }

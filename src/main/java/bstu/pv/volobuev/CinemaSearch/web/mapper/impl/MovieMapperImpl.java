@@ -5,10 +5,12 @@ import bstu.pv.volobuev.CinemaSearch.business.entity.PersonPost;
 import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.MovieResponse;
 import bstu.pv.volobuev.CinemaSearch.web.mapper.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Component
 public class MovieMapperImpl implements MovieMapper {
 
     private final CountryMapper countryMapper;

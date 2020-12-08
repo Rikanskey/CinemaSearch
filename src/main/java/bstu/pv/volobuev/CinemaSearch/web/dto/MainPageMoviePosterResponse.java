@@ -1,4 +1,4 @@
-package bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO;
+package bstu.pv.volobuev.CinemaSearch.web.dto;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class IdNameDTO {
+public class MainPageMoviePosterResponse {
     Long id;
-    String name;
+    String poster;
 }

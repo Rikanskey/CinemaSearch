@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="style_random_button__container">
-        <button class="myButton_Home">Random Movie</button>
+        <button class="myButton_Home" v-on:click="getRandomMovie">Random Movie</button>
       </div>
       <div class="style_top_5__container">
         <h2 class="style_welcome_head__style style_welcome_head__text">Top 5 movies</h2>
@@ -28,32 +28,27 @@
 </template>
 
 <script>
+import api from './backend-api'
+
 export default {
   name: 'Home',
+  created() {
+    api.getMovieWithHigherRating().then((response) => {
+      this.items = response.data
+    })
+    console.log(this.items)
+  },
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          poster: 'https://images-na.ssl-images-amazon.com/images/I/71W2aEcrxxL._AC_SL1334_.jpg'
-        },
-        {
-          id: 2,
-          poster: 'https://st.kp.yandex.net/im/poster/4/3/4/kinopoisk.ru-The-Godfather-434475.jpg'
-        },
-        {
-          id: 3,
-          poster: 'https://st.kp.yandex.net/im/poster/2/5/8/kinopoisk.ru-Pulp-Fiction-2589679.jpg'
-        },
-        {
-          id: 4,
-          poster: 'https://st.kp.yandex.net/im/poster/8/1/7/kinopoisk.ru-The-Lord-of-the-Rings_3A-The-Return-of-the-King-817079.jpg'
-        },
-        {
-          id: 5,
-          poster: 'https://st.kp.yandex.net/im/poster/2/4/4/kinopoisk.ru-Lock_2C-Stock-and-Two-Smoking-Barrels-2443231.jpg'
-        }
-      ]
+      items: []
+    }
+  },
+  methods: {
+    getRandomMovie: function () {
+      api.getRandomMovieId().then((response => {
+        window.location.href = 'https://www.google.com/'
+        window.location.href  = '/film/' + response.data.toString()
+      }))
     }
   }
 }

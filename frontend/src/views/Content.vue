@@ -67,7 +67,7 @@
                       <div class="styles_title__props">Writer</div>
                       <div v-for="writer in movie.writer" :key="writer.id">
                         <div v-if="movie.writer.indexOf(writer) !== movie.writer.length-1">
-                          <div class="styles_value__props">{{writer.name}},</div>
+                          <div class="styles_value__props">{{writer.name}}, </div>
                         </div>
                         <div v-else>
                           <div class="styles_value__props">{{writer.name}}</div>
@@ -213,7 +213,7 @@ export default {
         "July", "August", "September", "October", "November", "December"
       ];
       this.movie.year = release_date[0]
-      this.movie.release = release_date[2].slice(1) + " " + monthNames[parseInt(release_date[1])] + " " + release_date[0]
+      this.movie.release = parseInt(release_date[2]) + " " + monthNames[parseInt(release_date[1])-1] + " " + release_date[0]
     })
   },
   data() {
