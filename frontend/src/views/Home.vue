@@ -14,10 +14,10 @@
       <div class="style_top_5__container">
         <h2 class="style_welcome_head__style style_welcome_head__text">Top 5 movies</h2>
         <div class="style_top_5__poster_container">
-            <div class="styles_posterColumn__width" v-for="item in items" :key=item.id>
+            <div class="styles_posterColumn__width" v-for="item in items">
               <router-link :to="{path: '/film/' + item.id}">
                 <img class="film-poster styles_pic__size styles_pic__back image"
-                     v-bind:src="item.poster" alt="">
+                     :src="getPoster(item.id)"/>
               </router-link>
             </div>
           </div>
@@ -32,23 +32,34 @@ import api from './backend-api'
 
 export default {
   name: 'Home',
-  created() {
-    api.getMovieWithHigherRating().then((response) => {
-      this.items = response.data
-    })
-    console.log(this.items)
-  },
   data() {
     return {
-      items: []
+      items: [],
+      posters: []
     }
+  },
+  created() {
+    api.getMovieWithHigherRating()
+        .then(response => {
+          this.items = response.data
+          for (let i = 0; i < this.items.length; i++){
+            api.getMoviePoster(this.items[i].id)
+                .then(response => {
+                  this.posters.push({id:this.items[i].id, img: 'data:' + response.headers['content-type'] + ';base64,' + response.data})})
+            }
+          })
   },
   methods: {
     getRandomMovie: function () {
       api.getRandomMovieId().then((response => {
-        window.location.href = 'https://www.google.com/'
         window.location.href  = '/film/' + response.data.toString()
       }))
+    },
+    getPoster: function (id){
+      for (let i = 0; i < this.posters.length; i++)
+        if (this.posters[i].id === id)
+          return this.posters[i].img
+      return ''
     }
   }
 }

@@ -2,6 +2,8 @@ package bstu.pv.volobuev.CinemaSearch.business.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -10,10 +12,8 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "country")
 @Getter
 @Setter
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-//@ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Country {
+public class Country implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +22,8 @@ public class Country {
     @NotNull
     String name;
 
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     Set<Movie> movies;
 }

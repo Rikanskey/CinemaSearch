@@ -8,7 +8,7 @@
               <div class="styles_poster__pic_padding">
                 <a>
                   <img class="film-poster styles_pic__size styles_pic__back image"
-                       v-bind:src="movie.poster" alt>
+                       :src="post_img"/>
                 </a>
               </div>
             </div>
@@ -78,7 +78,7 @@
                       <div class="styles_title__props">Producer</div>
                       <div v-for="producer in movie.producer" :key="producer.id">
                         <div v-if="movie.producer.indexOf(producer) !== movie.producer.length-1">
-                          <div class="styles_value__props">{{producer.name}},</div>
+                          <div class="styles_value__props">{{producer.name}}, </div>
                         </div>
                         <div v-else>
                           <div class="styles_value__props">{{producer.name}}</div>
@@ -168,6 +168,7 @@
             </span>
           </label>
         </form>
+        <h3 style="margin-top: 5px; margin-bottom: 5px">Оценка фильма {{movie.rating.toFixed(2)}}</h3>
         <div v-if="user.isAuth() && movie.user_mark !== 0">Ваша оценка {{movie.user_mark}}</div>
       </div>
       <div class="styles_raiting_container__margin styles_container__back styles_container__disp">
@@ -189,6 +190,7 @@ import Full_star from "@/components/stars/Full_star";
 import Hovered_star from "@/components/stars/Hovered_star";
 
 import api from './backend-api'
+import user from "../components/user/user";
 
 export default {
   name: "Content",
@@ -196,6 +198,8 @@ export default {
   methods: {
     send_mark(mark){
       console.log('Отправлена оценка ' + mark)
+      api.putMovieRatingByUser(this.movie.id, mark, localStorage.getItem('access-token'))
+          .then(response => this.movie.rating = response.data)
       this.movie.user_mark = mark
     },
     over_star(star_index){
@@ -215,6 +219,17 @@ export default {
       this.movie.year = release_date[0]
       this.movie.release = parseInt(release_date[2]) + " " + monthNames[parseInt(release_date[1])-1] + " " + release_date[0]
     })
+    api.getMoviePoster(this.$route.params.id).then((response) => {
+      this.post_img = 'data:' + response.headers['content-type'] + ';base64,' + response.data
+    })
+    if (user.isAuth()){
+      api.getUserMovieRating(this.$route.params.id, localStorage.getItem('access-token'))
+      .then(response => {
+
+        this.movie.user_mark = response.data
+        console.log(this.movie.user_mark)
+      })
+    }
   },
   data() {
   return{
@@ -223,10 +238,10 @@ export default {
       empty_star: "url('/src/assets/Empty_star.png')",
       full_star: "url('/src/assets/Full_star.png')",
       hovered_star: "url('/src/assets/Hovered_star.png')",
+      post_img: '',
       movie: {
         id: 0,
         name: '',
-        poster: '',
         year: '',
         release: '',
         country: [],

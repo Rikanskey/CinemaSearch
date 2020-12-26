@@ -12,7 +12,6 @@ import java.util.List;
 public class MovieResponse {
     Long id;
     String name;
-    String poster;
     GregorianCalendar release;
     List<CountryResponse> country;
     List<GenreResponse> genre;

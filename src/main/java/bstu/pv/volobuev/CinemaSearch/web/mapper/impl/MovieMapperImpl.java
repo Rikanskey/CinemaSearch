@@ -79,7 +79,6 @@ public class MovieMapperImpl implements MovieMapper {
         movieResponse.setSynopsis(movie.getSynopsis());
         movieResponse.setRating(movie.getRating());
         movieResponse.setTrailer(movie.getTrailer_link());
-        movieResponse.setPoster(movie.getPoster()); //TODO: Not file path
 
         return movieResponse;
     }

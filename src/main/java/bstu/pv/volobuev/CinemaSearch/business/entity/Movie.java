@@ -2,23 +2,26 @@ package bstu.pv.volobuev.CinemaSearch.business.entity;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.*;
 
 @Entity(name = "movie")
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Movie {
+public class Movie implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @NotNull
+    @ToString.Include
     String name;
 
     @NotNull
@@ -28,7 +31,6 @@ public class Movie {
     Long box_office;
 
     @NotNull
-//    @Temporal(TemporalType.DATE)
     GregorianCalendar release;
 
     @NotNull
@@ -49,7 +51,7 @@ public class Movie {
     @NotNull
     String poster;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "movie_country",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
@@ -58,7 +60,7 @@ public class Movie {
     )
     Set<Country> countries;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "movie_genre",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
@@ -66,12 +68,23 @@ public class Movie {
             )
     Set<Genre> genres;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable
             (
                     name = "person_post_movie",
                     joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
                     inverseJoinColumns = @JoinColumn(name = "person_post_id", referencedColumnName = "id")
             )
-    List<PersonPost> personPosts;
+    Set<PersonPost> personPosts;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    Set<UserRatingMovie> usersRating;
+
+    public void updateRatingWithNewUser(Long userRating){
+        rating = (rating * (rating_num - 1) + userRating) / rating_num;
+    }
+
+    public void updateRatingWithExistUser(Long userRating, Long oldRating){
+        rating = (rating * rating_num - oldRating + userRating) / rating_num;
+    }
 }

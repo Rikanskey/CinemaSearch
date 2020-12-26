@@ -6,13 +6,14 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity(name = "person_post")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PersonPost {
+public class PersonPost implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

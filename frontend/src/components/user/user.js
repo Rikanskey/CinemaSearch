@@ -1,26 +1,26 @@
+import api from '../../views/backend-api'
+
 export default {
     login: null,
     accessToken: null,
+    id: 0,
     isAuth() {
-        this.load()
+        this.accessToken = localStorage.getItem('access-token')
         return this.accessToken !== null
     },
-    auth(data) {
-        localStorage.setItem('user', JSON.stringify(data))
-        this.login = data.login
-        this.accessToken = data.accessToken
-    },
     logout() {
-        localStorage.removeItem('user')
-        this.login = null
-        this.accessToken = null
+        localStorage.removeItem('access-token')
+        localStorage.removeItem('username')
+        this.id = 0
     },
-    load() {
-        let data = localStorage.getItem('user')
-        if (data !== null && data !== ''){
-            data = JSON.parse(data)
-            this.login = data.login
-            this.accessToken = data.accessToken
+    loadCurrentUser() {
+        let data = localStorage.getItem('username')
+        console.log(data)
+        if (data !== null && data !== '') {
+            api.getUserIdByUsername(data).then(response => {
+                console.log(response)
+                this.id = response.data
+            })
         }
     }
 }

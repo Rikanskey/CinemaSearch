@@ -1,27 +1,40 @@
 package bstu.pv.volobuev.CinemaSearch.web.controller;
 
 import bstu.pv.volobuev.CinemaSearch.business.service.MovieService;
-import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.CountryResponse;
-import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.GenreResponse;
+import bstu.pv.volobuev.CinemaSearch.web.dto.ImageResponse;
 import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.MovieResponse;
-import bstu.pv.volobuev.CinemaSearch.web.dto.contentPageDTO.PersonResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.CacheControl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.security.Principal;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/movie")
+@Slf4j
 public class ContentPageController {
 
     private final MovieService movieService;
 
-      @GetMapping("/{id}")
-      MovieResponse getMovie(@PathVariable Long id){
+    @GetMapping("/{id}")
+    MovieResponse getMovie(@PathVariable Long id){
           return movieService.getMovie(id);
       }
+
+    @GetMapping("/{id}/img")
+    ResponseEntity<String> getMoviePoster(@PathVariable Long id){
+        ImageResponse imageResponse = movieService.getMoviePoster(id);
+        String encodeImage = Base64.getEncoder().encodeToString(imageResponse.getByteArrayResource().getByteArray());
+        return ResponseEntity
+                .ok()
+                .cacheControl(CacheControl.maxAge(300, TimeUnit.SECONDS))
+                .contentLength(encodeImage.length())
+                .contentType(imageResponse.getMediaType())
+                .body(encodeImage);
+    }
 }

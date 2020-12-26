@@ -6,10 +6,10 @@
             <div class="styles_header_width_height">
               <div class="styles_position__logo_Header">
                 <router-link class="styles_font__logo_Header" v-bind:to="{name: 'Home'}">MovieBlog</router-link>
-                <router-link v-if="!user.isAuth() && $router.currentRoute.path !== '/auth'" class="styles_font__signIn_Header styles__signIn_Button" v-bind:to="{name: 'AuthReg'}">Sign In</router-link>
+                <router-link v-if="!user.isAuth() && $router.currentRoute.path !== '/auth'" class="styles_font__signIn_Header styles__signIn_Button" :to="{name: 'AuthReg'}">Sign In</router-link>
                 <div v-else-if="user.isAuth()" class="styles_font__signIn_Header styles__signIn_Button">
                   <div class="styles_font__signIn_Header styles__profile_logout_Button" v-on:click="user.logout()">Logout</div>
-                  <router-link class="styles_font__signIn_Header styles__profile_logout_Button" to="/profile/{user.id}">Profile</router-link>
+                  <router-link class="styles_font__signIn_Header styles__profile_logout_Button" :to="{path: '/profile/' + user.id}">Profile</router-link>
                 </div>
               </div>
             </div>
@@ -35,10 +35,13 @@ import User from "./components/user/user";
 
 export default {
   name: 'app',
+  created() {
+    this.user.loadCurrentUser()
+  },
   data(){
     return{
       user: User
-    };
+    }
   }
 }
 </script>
