@@ -139,14 +139,17 @@
             </div>
           </div>
         </div>
-
-
       </div>
+
       <div class="styles_container__back styles_container__disp">
         <div class="styles_сontainer__props">
-          <h3 class="styles_actors_title__margin styles_title_info__font_style styles_title__color">Synopsis</h3>
-          <div class="styles_synopsis__font">
-            <p>{{movie.synopsis}}</p>
+          <label style="font-size: 14pt; font-style: inherit">Show Synopsis</label>
+          <input type="checkbox" id="show_synopsis" v-model="show_synopsis">
+          <div v-if="show_synopsis">
+            <h3 class="styles_actors_title__margin styles_title_info__font_style styles_title__color" id="synposis">Synopsis</h3>
+            <div class="styles_synopsis__font" id="synopsis_text">
+              <p>{{movie.synopsis}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -239,6 +242,7 @@ export default {
       full_star: "url('/src/assets/Full_star.png')",
       hovered_star: "url('/src/assets/Hovered_star.png')",
       post_img: '',
+      show_synopsis: false,
       movie: {
         id: 0,
         name: '',

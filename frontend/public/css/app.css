@@ -761,3 +761,10 @@ h1, h2, h3, h4, h5, h6 {
     position:relative;
     top:1px;
 }
+
+.styles__avatar_updated_message{
+    font-size: 12pt;
+    color: green;
+    margin-left: 20px;
+    margin-top: 5px;
+}

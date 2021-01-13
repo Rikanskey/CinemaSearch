@@ -9,8 +9,9 @@
             </div>
             <div v-if="isThisActualUser()" style="margin-left: 20px; border: groove; height: 20px; width: 90px">
               <label for="file" class="btn">Update avatar</label>
-              <input id="file" type="file" @change="uploadImage" style="visibility: hidden">
+              <input id="file" type="file" v-on:change="uploadImage" style="visibility: hidden">
             </div>
+            <div v-if="avatar_updated" class="styles__avatar_updated_message">Avatar updated!</div>
             </div>
           <div class="profileInfoWrapRight">
             <h2 class="styles_font__nickname">{{user.username}}</h2>
@@ -57,6 +58,7 @@ name: "Profile",
   data(){
   return{
     avatar: '',
+    avatar_updated: false,
     user: {
         username: '',
         movies: [],
@@ -69,15 +71,17 @@ name: "Profile",
       return this.user.username === localStorage.getItem('username')
     },
     uploadImage(event){
-      console.log(event)
       this.selectedFile = event.target.files[0]
       let formData = new FormData()
       formData.append('avatar', this.selectedFile)
       console.log(this.selectedFile)
-      if (this.selectedFile.name.split('.')[1] === 'jpg')
+      if (this.selectedFile.name.split('.')[1] === 'jpg' || this.selectedFile.name.split('.')[1] === 'jpeg')
         api.postUserAvatar(this.$route.params.id, formData)
         .then(() => api.getUserAvatar(this.$route.params.id)
-          .then(response => this.avatar = 'data:' + response.headers['content-type'] + ';base64,' + response.data))
+          .then(response => {
+            this.avatar = 'data:' + response.headers['content-type'] + ';base64,' + response.data
+            this.avatar_updated = true
+          }))
     }
   }
 }

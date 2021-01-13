@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="style_random_button__container">
-        <button class="myButton_Home" v-on:click="getRandomMovie">Random Movie</button>
+        <button class="myButton_Home" id="random_button" v-on:click="getRandomMovie">Random Movie</button>
       </div>
       <div class="style_top_5__container">
         <h2 class="style_welcome_head__style style_welcome_head__text">Top 5 movies</h2>

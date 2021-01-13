@@ -23,8 +23,8 @@
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <button class="myButton" type="button" v-on:click="signIn_button_clicked">Sign in</button>
-        <button class="myButton" type="button" v-on:click="create_acc_button_clicked">Create account</button>
+        <button class="myButton" type="button" id="sign_in_button" v-on:click="signIn_button_clicked">Sign in</button>
+        <button class="myButton" type="button" id="create_account_button" v-on:click="create_acc_button_clicked">Create account</button>
         </div>
       <div v-else>
         <div class="input_box">

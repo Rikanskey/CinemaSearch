@@ -8,8 +8,8 @@
                 <router-link class="styles_font__logo_Header" v-bind:to="{name: 'Home'}">MovieBlog</router-link>
                 <router-link v-if="!user.isAuth() && $router.currentRoute.path !== '/auth'" class="styles_font__signIn_Header styles__signIn_Button" :to="{name: 'AuthReg'}">Sign In</router-link>
                 <div v-else-if="user.isAuth()" class="styles_font__signIn_Header styles__signIn_Button">
-                  <div class="styles_font__signIn_Header styles__profile_logout_Button" v-on:click="user.logout()">Logout</div>
-                  <router-link class="styles_font__signIn_Header styles__profile_logout_Button" :to="{path: '/profile/' + user.id}">Profile</router-link>
+                  <div class="styles_font__signIn_Header styles__profile_logout_Button" id="logout_button" v-on:click="user.logout()">Logout</div>
+                  <router-link class="styles_font__signIn_Header styles__profile_logout_Button" id="profile_button" :to="{path: '/profile/' + user.id}">Profile</router-link>
                 </div>
               </div>
             </div>

@@ -48,7 +48,7 @@ class UserAccountServiceImplTest {
 
     @Test
     void encoderTest(){
-        String password = "123456";
+        String password = "client123";
         String firstEncode = passwordEncoder.encode(password);
         String secondEncode = passwordEncoder.encode(password);
         log.info("First password: {}; Second password: {}", firstEncode, secondEncode);
