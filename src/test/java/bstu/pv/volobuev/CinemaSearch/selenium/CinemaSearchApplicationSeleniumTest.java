@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 public class CinemaSearchApplicationSeleniumTest {
 
-    private WebDriver webDriver;
+    private final WebDriver webDriver;
 
     private final String uri = "http://192.168.3.101:8080/";
 
