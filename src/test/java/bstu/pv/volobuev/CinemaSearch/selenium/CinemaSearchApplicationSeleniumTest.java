@@ -1,13 +1,11 @@
 package bstu.pv.volobuev.CinemaSearch.selenium;
 
+import bstu.pv.volobuev.CinemaSearch.selenium.pages.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CinemaSearchApplicationSeleniumTest {
 
     private final WebDriver webDriver;
+
+    private MainPage mainPage;
 
     private final String uri = "http://192.168.3.101:8080/";
 
@@ -38,6 +38,7 @@ public class CinemaSearchApplicationSeleniumTest {
     @BeforeEach
     public void setUp(){
         webDriver.get(uri);
+        mainPage = new MainPage(webDriver);
     }
 
     @AfterEach
@@ -47,45 +48,49 @@ public class CinemaSearchApplicationSeleniumTest {
 
     @Test
     public void mainPageGetTest(){
-        WebElement webElement = webDriver.findElement(By.id("random_button"));
-        WebElement webElement1 = webDriver.findElement(By.className("style_top_5__container"));
+        WebElement webElement = mainPage.getElementById("random_button");
+        WebElement webElement1 = mainPage.getElementByClassName("style_top_5__container");
         assertEquals("Random Movie", webElement.getText());
         assertEquals(5, webElement1.findElements(By.className("styles_posterColumn__width")).size());
     }
 
     @Test
     public void mainPageRandomButtonClickTest(){
-        webDriver.findElement(By.id("random_button")).click();
-        WebElement webElement = webDriver.findElement(By.className("styles_title_info__pos"));
+        ContentPage contentPage = mainPage.clickRandomMovieButton();
+        WebElement webElement = contentPage.getElementByClassName("styles_title_info__pos");
         assertEquals("About Movie", webElement.getText());
     }
 
     @Test
     public void contentPageReadSynopsisTest(){
-        webDriver.findElement(By.id("random_button")).click();
-        webDriver.findElement(By.id("show_synopsis")).click();
-        assertTrue(webDriver.findElement(By.className("styles_synopsis__font")).isDisplayed());
+        ContentPage contentPage = mainPage.clickRandomMovieButton();
+        contentPage.clickShowSynopsisCheckbox();
+        assertTrue(contentPage.getElementByClassName("styles_synopsis__font").isDisplayed());
     }
 
     @Test
     public void authorizationTest(){
-        webDriver.findElement(By.className("styles__signIn_Button")).click();
-        webDriver.findElement(By.id("inputEmail")).sendKeys(username);
-        webDriver.findElement(By.id("inputPassword")).sendKeys(password);
-        webDriver.findElement(By.id("sign_in_button")).click();
-        assertEquals("Profile", webDriver.findElement(By.id("profile_button")).getText());
+        mainPage = authorization(mainPage, username, password);
+        assertEquals("Profile", mainPage.getElementById("profile_button").getText());
+    }
+
+    private MainPage authorization(Page page, String username, String password){
+        LoginPage loginPage = page.clickSignInButton();
+        return loginPage.authenticate(username, password);
     }
 
     @Test
     public void checkOtherUserProfileTest(){
         webDriver.get(uri + "profile/1");
-        assertEquals("testuser", webDriver.findElement(By.className("styles_font__nickname")).getText());
-        assertFalse(isElementPresent("btn"));
+        ProfilePage profilePage = new ProfilePage(webDriver);
+        assertEquals("testuser",
+                profilePage.getElementByClassName("styles_font__nickname").getText());
+        assertFalse(isElementPresent(profilePage, "btn"));
     }
 
-    private boolean isElementPresent(String webElementClassName){
+    private boolean isElementPresent(Page currentPage, String webElementClassName){
         try {
-            webDriver.findElement(By.className(webElementClassName));
+            currentPage.getElementByClassName(webElementClassName);
             return true;
         }
         catch (NoSuchElementException e){
@@ -95,25 +100,20 @@ public class CinemaSearchApplicationSeleniumTest {
 
     @Test
     public void authorizationLogoutTest(){
-        webDriver.findElement(By.className("styles__signIn_Button")).click();
-        webDriver.findElement(By.id("inputEmail")).sendKeys(username);
-        webDriver.findElement(By.id("inputPassword")).sendKeys(password);
-        webDriver.findElement(By.id("sign_in_button")).click();
-        webDriver.findElement(By.id("logout_button")).click();
-        assertEquals("Sign In", webDriver.findElement(By.className("styles__signIn_Button")).getText());
+        mainPage = authorization(mainPage, username, password);
+        mainPage.clickLogoutButton();
+        assertEquals("Sign In",
+                mainPage.getElementByClassName("styles__signIn_Button").getText());
     }
 
     @Test
     public void userRateTopFirstMovieTest(){
-        webDriver.findElement(By.className("styles__signIn_Button")).click();
-        webDriver.findElement(By.id("inputEmail")).sendKeys(username);
-        webDriver.findElement(By.id("inputPassword")).sendKeys(password);
-        webDriver.findElement(By.id("sign_in_button")).click();
-        webDriver.findElements(By.className("styles_posterColumn__width")).get(0).click();
-        String movieName = webDriver.findElement(By.className("styles_title__pos")).getText();
-        webDriver.findElements(By.className("styles_radio__star_container")).get(userRate-1).click();
-        webDriver.findElement(By.id("profile_button")).click();
-        List<WebElement> userRatedMovies = webDriver.findElements(By.className("styles_item"));
+        mainPage = authorization(mainPage, username, password);
+        ContentPage contentPage = mainPage.clickNTopMovie(0);
+        String movieName = contentPage.getElementByClassName("styles_title__pos").getText();
+        contentPage.rateMovie(userRate);
+        ProfilePage profilePage = contentPage.clickProfileButton();
+        List<WebElement> userRatedMovies = profilePage.getElementsById("styles_item");
         boolean isRatedMovieInList = false;
         for (WebElement movie : userRatedMovies){
             if (movie.findElement(By.className("styles_profile_list_name")).getText().equals(movieName) &&
@@ -125,34 +125,10 @@ public class CinemaSearchApplicationSeleniumTest {
 
     @Test
     public void userUpdateAvatar() {
-        webDriver.findElement(By.className("styles__signIn_Button")).click();
-        webDriver.findElement(By.id("inputEmail")).sendKeys(username);
-        webDriver.findElement(By.id("inputPassword")).sendKeys(password);
-        webDriver.findElement(By.id("sign_in_button")).click();
-        webDriver.findElement(By.id("profile_button")).click();
-        WebElement webElement = webDriver.findElement(By.className("btn"));
-        webElement.click();
-        try {
-            searchFileInModalWindow(userAvatar);
-        }
-        catch (AWTException e){
-            log.info("Exception: ", e);
-        }
+        mainPage = authorization(mainPage, username, password);
+        ProfilePage profilePage = mainPage.clickProfileButton();
+        profilePage.updateUserAvatar(userAvatar);
         assertEquals("Avatar updated!",
-                webDriver.findElement(By.className("styles__avatar_updated_message")).getText());
-    }
-
-    private void searchFileInModalWindow(String file) throws AWTException{
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(file), null);
-        Robot robot = new Robot();
-
-        robot.keyPress(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_V);
-        robot.keyRelease(KeyEvent.VK_CONTROL);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ENTER);
-        robot.delay(2000);
-        robot.keyPress(KeyEvent.VK_ENTER);
+                profilePage.getElementByClassName("styles__avatar_updated_message").getText());
     }
 }
